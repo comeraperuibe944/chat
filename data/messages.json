@@ -67,5 +67,28 @@
       "publicKey": "{\"crv\":\"P-256\",\"ext\":true,\"key_ops\":[\"verify\"],\"kty\":\"EC\",\"x\":\"sAtfKfnUK_Vvbzy41e78ir-AtaRNQyrEOB8CHwAaJZY\",\"y\":\"bpQOM14NaiaPRuNm8PCBfZdvdUFOmKbsJHuDqL0-3_k\"}",
       "signature": "FGC1GDydVIuCffi7ON//OB3CHsvVPCS18ZvrX3CJhXiXIEe44tFY4bv/Lrmp5jwd0tr/lVq50ngLwy+m77w+rw=="
     }
+  },
+  {
+    "id": "1788726212831-5o1qw",
+    "createdAt": "2026-09-06T20:23:42.202Z",
+    "payload": {
+      "version": 1,
+      "roomId": "public",
+      "senderHash": "1189d3d8",
+      "color": "#F28500",
+      "device": "mobile",
+      "avatarSeed": 0,
+      "salt": "Dux6HjB4EBUhAiIYvG1WMA==",
+      "iv": "WD7Y8t3dvo1FuApU",
+      "ciphertext": "v0ECn7lznammnq2fbfSU2FXsxun/PsjaA/6DICZgt/S1sGOr1uAKJ9/MAncqINwOo3twAHlj5Xk4t3sttqAUSd18JmMaATIstXmhbo58ReVMgwPEcB3L0oorXGe7UT6hmXnUX0wyLlSS7Jr9QAvUAfZ/ortw6hU=",
+      "timestamp": 1788726212831,
+      "pow": {
+        "nonce": "1215",
+        "difficulty": 12,
+        "challenge": "public:1189d3d8:1788726212831"
+      },
+      "publicKey": "{\"crv\":\"P-256\",\"ext\":true,\"key_ops\":[\"verify\"],\"kty\":\"EC\",\"x\":\"sAtfKfnUK_Vvbzy41e78ir-AtaRNQyrEOB8CHwAaJZY\",\"y\":\"bpQOM14NaiaPRuNm8PCBfZdvdUFOmKbsJHuDqL0-3_k\"}",
+      "signature": "FIPghCJwWov6f0xTRMVj+pMrbWG+a11EnaL2eN9sA3GZ+WuguhncfjcLwSRw12WCI2Yo8fpu6QAzMp1w337xkA=="
+    }
   }
 ]
