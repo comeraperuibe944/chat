@@ -90,5 +90,28 @@
       "publicKey": "{\"crv\":\"P-256\",\"ext\":true,\"key_ops\":[\"verify\"],\"kty\":\"EC\",\"x\":\"sAtfKfnUK_Vvbzy41e78ir-AtaRNQyrEOB8CHwAaJZY\",\"y\":\"bpQOM14NaiaPRuNm8PCBfZdvdUFOmKbsJHuDqL0-3_k\"}",
       "signature": "FIPghCJwWov6f0xTRMVj+pMrbWG+a11EnaL2eN9sA3GZ+WuguhncfjcLwSRw12WCI2Yo8fpu6QAzMp1w337xkA=="
     }
+  },
+  {
+    "id": "1788726256578-c00xc",
+    "createdAt": "2026-09-06T20:24:24.705Z",
+    "payload": {
+      "version": 1,
+      "roomId": "public",
+      "senderHash": "6ef58a0a",
+      "color": "#4169E1",
+      "device": "desktop",
+      "avatarSeed": 0,
+      "salt": "UT+IlUvW1aOYW0QAEadePA==",
+      "iv": "DfVtNtSh10u6qZl4",
+      "ciphertext": "haRJnDfo4c6DrmHJ3fwW82FnySBI+ZHNRb4jJZqrF1CZYHNrvKcvidSirLAYcQIxkQ3Pe+TfTBeNH7z8IqftJRCfZmIQpT7iuNWMmrrSRU1LavYQOuvn8/H+dQM9pDxpnoWQbFyrfqj3RFYV/pdBBYaJV1HU",
+      "timestamp": 1788726256578,
+      "pow": {
+        "nonce": "2175",
+        "difficulty": 12,
+        "challenge": "public:6ef58a0a:1788726256578"
+      },
+      "publicKey": "{\"crv\":\"P-256\",\"ext\":true,\"key_ops\":[\"verify\"],\"kty\":\"EC\",\"x\":\"bMQXy5XydH9k3uBdqKrUEyjjYaBSWztTgqDCsDHVI6o\",\"y\":\"jlsEwzpgkrdw82HsxSYf8aj6zdmysYj33AfCZCJ4gWk\"}",
+      "signature": "8bkp4EonidiS2vUQDHZH2EiDIpmrHNNh63Mw3d5Fc7pW+z3QCYBrnzBKvBaJbxxmu9XGFUnhYvZUbzrAzSgrBA=="
+    }
   }
 ]
