@@ -1,0 +1,167 @@
+name: Process Inbound Message
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  ingest:
+    if: contains(github.event.issue.labels.*.name, 'chat-msg')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Ingest and verify message payload
+        id: process_payload
+        run: |
+          node -e '
+          const fs = require("fs");
+          const issueBody = process.env.ISSUE_BODY || "";
+          const match = issueBody.match(/```json\n([\s\S]*?)\n```/);
+          if (!match || !match[1]) {
+            console.log("No valid JSON code block found in issue body. Terminating.");
+            process.exit(0);
+          }
+
+          let payload;
+          try {
+            payload = JSON.parse(match[1]);
+          } catch (e) {
+            console.error("Invalid JSON:", e);
+            process.exit(0);
+          }
+
+          // 1. Structure validation
+          if (!payload.ciphertext || !payload.iv || !payload.salt || !payload.pow) {
+            console.error("Incomplete encrypted envelope.");
+            process.exit(0);
+          }
+
+          // 2. Length boundary protection (max 2048 chars)
+          if (typeof payload.ciphertext !== "string" || payload.ciphertext.length > 2048) {
+            console.error("Ciphertext exceeds maximum permitted size.");
+            process.exit(0);
+          }
+
+          // 3. Anti-Replay Timestamp Check (5 minute freshness window)
+          const now = Date.now();
+          const timestamp = Number(payload.timestamp || 0);
+          if (Math.abs(now - timestamp) > 5 * 60 * 1000) {
+            console.error("Payload timestamp outside valid 5-minute window. Possible replay attack.");
+            process.exit(0);
+          }
+
+          // 4. Proof-of-Work Verification
+          const challenge = payload.pow.challenge || "";
+          const nonce = BigInt(payload.pow.nonce || "0");
+          const diff = Number(payload.pow.difficulty || 12);
+
+          let seed = 2166136261n;
+          for (let i = 0; i < challenge.length; i++) {
+            seed ^= BigInt(challenge.charCodeAt(i));
+            seed = (seed * 16777619n) & 0xffffffffffffffffn;
+          }
+
+          const LCG_MULTIPLIER = 6364136223846793005n;
+          const LCG_ADDEND = 1442695040888963407n;
+          const mask = (1n << BigInt(diff)) - 1n;
+          const hash = ((seed ^ nonce) * LCG_MULTIPLIER + LCG_ADDEND) & 0xffffffffffffffffn;
+
+          if ((hash & mask) !== 0n) {
+            console.error("PoW verification failed. Discarding spam message.");
+            process.exit(0);
+          }
+
+          const dataDir = "./data";
+          if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir, { recursive: true });
+          }
+
+          const dataFile = "./data/messages.json";
+          let messages = [];
+          if (fs.existsSync(dataFile)) {
+            try {
+              messages = JSON.parse(fs.readFileSync(dataFile, "utf8"));
+            } catch {
+              messages = [];
+            }
+          }
+
+          // 5. Anti-Replay Deduplication Check
+          const isDuplicate = messages.some(m => {
+            const p = m.payload || m;
+            return p.ciphertext === payload.ciphertext || (p.pow && p.pow.nonce === payload.pow.nonce);
+          });
+
+          if (isDuplicate) {
+            console.warn("Duplicate payload detected. Ignoring replay.");
+            process.exit(0);
+          }
+
+          console.log("PoW & Security checks passed. Appending encrypted message.");
+          messages.push({
+            id: `${payload.timestamp}-${Math.random().toString(36).substring(2, 7)}`,
+            createdAt: new Date().toISOString(),
+            payload: {
+              version: payload.version || 1,
+              roomId: String(payload.roomId || "public").substring(0, 32),
+              senderHash: String(payload.senderHash || "anon").substring(0, 16),
+              color: payload.color,
+              device: payload.device,
+              avatarSeed: Number(payload.avatarSeed || 0),
+              salt: payload.salt,
+              iv: payload.iv,
+              ciphertext: payload.ciphertext,
+              timestamp: payload.timestamp,
+              pow: payload.pow,
+              publicKey: payload.publicKey,
+              signature: payload.signature
+            }
+          });
+
+          // Retain latest 300 messages
+          if (messages.length > 300) {
+            messages = messages.slice(messages.length - 300);
+          }
+
+          fs.writeFileSync(dataFile, JSON.stringify(messages, null, 2), "utf8");
+          console.log("Updated data/messages.json. Total records:", messages.length);
+          '
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+
+      - name: Commit and push message archive
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/messages.json
+          git diff --staged --quiet || git commit -m "chore: archive encrypted envelope"
+          git push
+
+      - name: Close and lock processed issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: 'closed',
+              state_reason: 'completed'
+            });
+            await github.rest.issues.lock({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              lock_reason: 'resolved'
+            });
