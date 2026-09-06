@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "id": "1788726100495-r2m7x",
+    "createdAt": "2026-09-06T20:21:48.926Z",
+    "payload": {
+      "version": 1,
+      "roomId": "public",
+      "senderHash": "6ef58a0a",
+      "color": "#4169E1",
+      "device": "desktop",
+      "avatarSeed": 0,
+      "salt": "tKH/a1dUA8QorllP3T0jQA==",
+      "iv": "7slUh6dh2R9MT4lw",
+      "ciphertext": "9QytvsntYCA5LR+jj5hHYuDjy25StwyLOPG/6Ly17qnG0mUO7Ks2DN27yS/4DdJtASXFt53dlS2KrPOGq6BLVepo+3Ezs92CkmMRdMD1iv/LouSmquW5qFWLneyvCCMleTJJ30t6mD+9JPgPJiv7PRtFc6pAEhq9MyvrBLRqxLKX8ZX3itlgLbOzMtIi/KrT7m50o7YFW45ocmGzb/hsllad8KpPN408qt30t8p8Hfb8/CpEyve3Wrdfs+VbHLh6wcOut0aSOd1KcKwOi9FW21tdRXD19ZCgZmlkPftcWgnOiBusZEjYZ/jXPugBYap2lCJvquyhlarpg4yU66wv1/IEgnMFhXzq5DwELVjzOA0SNd61Wzs=",
+      "timestamp": 1788726100495,
+      "pow": {
+        "nonce": "1367",
+        "difficulty": 12,
+        "challenge": "public:6ef58a0a:1788726100495"
+      },
+      "publicKey": "{\"crv\":\"P-256\",\"ext\":true,\"key_ops\":[\"verify\"],\"kty\":\"EC\",\"x\":\"bMQXy5XydH9k3uBdqKrUEyjjYaBSWztTgqDCsDHVI6o\",\"y\":\"jlsEwzpgkrdw82HsxSYf8aj6zdmysYj33AfCZCJ4gWk\"}",
+      "signature": "y5Z3SK42fHBFtApHCpBaUOfJFnaiuQfPak0XV3gjvQt7rdTVpmz+vIKkrQWvSeTnTLeHCJJIXkeEMjqNt/LgDA=="
+    }
+  }
+]
